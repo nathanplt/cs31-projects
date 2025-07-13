@@ -2,7 +2,7 @@
 
 This repository contains my solutions to the programming assignments for **CS 31: Introduction to Computer Science I** at UCLA, completed during Fall 2024. The course covers fundamental C++ programming concepts, software engineering practices, and algorithmic thinking.
 
-## 📁 Projects Overview
+## Overview
 
 | Project | Topics Covered | Key Files |
 |--------:|----------------|-----------|
@@ -12,14 +12,21 @@ This repository contains my solutions to the programming assignments for **CS 31
 | **Project 4** | Arrays, functions | `array.cpp`, `report.txt` |
 | **Project 5** | Strings, modular design, function reuse | `stars.cpp`, `utilities.cpp`, `utilities.h` |
 | **Project 6** | Structuring multi-file programs | `hw.txt` |
-| **Project 7** | Simulations, nested conditionals | `bees.cpp` |
-| **Project 7.1** | Warm-up coding challenge | `warmup.cpp` |
+| **Project 7** | Simulations, OOP | `bees.cpp` |
+| **Project 7.1** | Final exam warmup| `warmup.cpp` |
 
 Each project was written in standard C++ and compiled/tested on macOS using `clang++` or Xcode.
 
-## 🔧 How to Build and Run
+## How to build and run
 
 You can compile most programs using:
 ```bash
 clang++ -std=c++11 -Wall -Werror -o main <filename>.cpp
 ./main
+```
+
+For multi-file projects:
+```bash
+clang++ -std=c++11 -Wall -Werror -o main *.cpp
+./main
+```
