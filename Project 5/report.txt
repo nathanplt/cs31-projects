@@ -1,0 +1,97 @@
+a) The hardest part about this project for me was having to use c string instead of the normal c++ string objects. One of the things I struggled with was figuring out how to read in the player's guess using a c string. The compiler would not let me use cin directly and cin.getline was not working. Eventually, I realized that 1) the c string needed to have a declared size and 2) cin.getline had a second parameter -- the number of characters to read in. After looking through the spec, I found that it specificed the guess would be no more than 100 characters (not including the new line char) so I was able to initailize the c string to have a size of 102, and read in 101 characters using get line, which worked fine. Also, part of my code logic was reliant on int arrays. At first, the arrays and values I was getting were not what I was expecting. Eventually, I realized this was because I was relying on undefined behavior in my code, and added some code to fill the int arrays with all zeroes first, so all behavior would be defined. This fixed my issue.
+
+b) There were two main components of the program: the main function and the runOneRound function.
+
+The runOneRound function checks to make sure all conditions are valid, then runs an infinite loop until the user guesses the correct word. Within the loop, there is an algorithm to calculate the number of planets and stars in the player's guess. The function returns the nubmer of guesses the user took.
+
+int runOneRound(char wordList[][max length of word], int nWrods, int wordnum) {
+    if nWords is not positive,
+        return -1
+    
+    if wordnum is not a valid index of wordList,
+        return -1
+        
+    set secretWord to the word at index wordnum in wordList
+    set secretLen to the length of secretWord
+    
+    set attempts to 1
+    repeatedly:
+        set trialWord to the user's guess
+        set trialLen to the length of trialWord
+        
+        if trial is not a word of 4 to 6 lower case letters,
+            write the requirements of the user guess
+            continue
+        
+        if none of the words in wordList match trialWord,
+            write the error
+            continue
+        
+        if the trialWord is equal to the secretWord,
+            break
+            
+        set trialCharFreq to an int array of size 26 that stores the frequency of each alphabet character (a to z) for trialWord
+        set secretCharFreq to the same thing but for secretWord
+        
+        set nStars to 0
+        loop through each index of trialWord and secretWord, up to the shorter of the two:
+            if the character at the current index is equal for both,
+                increment nStars by 1
+                reduce the frequency of the current character by 1 in both trialCharFreq and secretCharFreq to prevent counting it as a planet
+                
+        set nPlanets to 0
+        loop through all the char frequencies for both words:
+            increment nPlanets by the minimum of the two frequencies (trialCharFreq and secretCharFreq)
+            
+        write the number of stars and planets
+        increment attempts by 1
+        
+    return attempts
+}
+
+The main function structures the game and keeps track of the user's average score, min score, and max score over the rounds they play.
+
+int main() {
+    set wordList to the desired word database
+    set nWords to the number of words in wordList
+    
+    if nWords is less than 1,
+        write an error
+        return 1
+        
+    write to ask the user how many rounds they want to play
+    set nRounds to the user input
+
+    if nRounds is not positive,
+        write an error
+        return 1
+        
+    set averageScore to 0
+    set minScore to -1
+    set maxScore to -1
+    set sumuSCore to 0
+    
+    repeat for nRounds:
+        write the current round number
+        
+        choose a random word as the secret word
+        write the length of the secret word
+        
+        use runOneRound to simulate the round and set currScore to the number of user attempts
+        
+        if currScore is -1:
+            write an error
+            return 1
+            
+        increment sumScore by currScore
+        set averageSscore to sumScore divided by the current round number
+        
+        if minScore is -1,
+            set minScore to currScore
+        otherewise, set minScore to currScore only if it is less than the current minScore
+        
+        do the same for maxScore, except set it to currScore only if it is larger
+        
+        write the number of attempts it took the user to guess the secret word
+        write the statistics (average, minium, maximum)
+}

@@ -1,0 +1,17 @@
+1) One of the obstacles was when my code's input was not working properly. It would always fail when asking for the customer's name. I eventually realized this was because of input conflicts when taking the input of an "int" data type and taking the input of a "string" data type. To resolve this, I simply added the cin.ignore(10000, '\n'); line before taking the input of a "string", which worked out. Another obstacle was figuring out how to make the program stop when encountering an error in the input. The observation taht allowed me to solve this was that int main() which is where I was writing all of my code, is actually a function. Thus, to stop the program when there was an error, all I had to do was add a return statement of some integer. My solution in the end was to insert a return 1; line at all of the error conditionals, to stop the program if an error was found.
+
+2)
+The first set of test cases was to test if my error conditionals worked properly:
+Negative starting odometer reading (start = -2), program stopped and output error
+End odometer reading less than start (start = 3, end = 2), program stopped and output error
+Rental days is not positive (start = 3, end = 4, days = 0), program stopped and output error
+Customer name is empty string (start = 3, end = 4, days = 1, name = ""), program stopped and output error
+Luxury status is not y or n (start = 3, end = 4, days = 1, name = "Bob", luxury = "Y"), program stopped and output error
+Month number is not an integer between 1 and 12 inclusive (start = 3, end = 4, days = 1, name = "Bob", luxury = "y", month = 0), program stopped and output error
+
+Next, I did a few tests to make sure the calculation was correct:
+Not luxury (start = 1, end = 3, days = 2, name = "Bob", luxury = "n", month = 5), $90.66
+Winter month (start = 1, end = 3, days = 2, name = "Bob", luxury = "y", month = 2), $150.66
+More than 100 miles but less than 600 (start = 1, end = 500, days = 2, name = "Bob", luxury = "n", month = 5), $230.73
+More than 600 miles (start = 1, end = 700, days = 3, name = "Bob", luxury = "y", month = 3), $443.79
+

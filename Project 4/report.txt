@@ -1,0 +1,67 @@
+a. One of the obstacles was the fact that I missed some error cases in the functions. In particular, for rotateLeft, I almost did not realize that if "pos" was not within the elements of interest denoted by "n", then the function should return -1. It was only after extensive testing did I realize that I needed to add an extra conditional to the start of the function, ensuring that "pos" was both greater than or equal to zero and less than "n". Another obstacle was figuring out how to implement the separate function. I couldn't figure out to write the function in a way that all the elements less than "separator" would be on the left, all the elements greater than "separator" would be on the right, and all the elements equal to "separator" would be in the middle. At first, I tried simply moving all elements less than "separator" to the leftmost positions of the array. However, doing this would result in an error if there were elements equal to "separator" in certain positions (e.g. some of the elements equal to "separator" may end up to the right of elements that are greater than "separator"). Eventually, I realized that the function description was just a long way of saying: sort "a" lexicographically. This accomplishes all three checks: put elements less than "separator" to the left, put elements greater than "separator" to the right, and keep elements equal to "separator" in the middle.
+
+b. Test cases
+string a[10] = {"a", "b", "c"};
+string b[10] = {"a", "b", "c", "c"};
+string c[10] = {};
+string d[10] = {"d", "d", "c", "b", "a"};
+string e[10] = {"a", "b"};
+string f[10] = {"c"};
+
+appendToAll(a, -100, "!"); // n is negative, so it should return -1
+appendToAll(a, 2, "!!"); // should only add "!!" to the first 2 elements, not to "c"
+appendToAll(a, 0, "!!"); // n is zero, so it should not apply "!!" to any elements and return n
+
+lookup(a, -2, "b"); // n is negative, so it should return -1
+lookup(a, 1, "b"); // although "b" is in the array, it is not in the first n elements, so it should return -1
+lookup(a, 3, "c"); // check if the function works and returns 2
+lookup(a, 3, "d"); // check if the function works and returns -1
+lookup(b, 4, "c"); // there is two "c" strings, but it should return the position of the first one (2)
+lookup(c, 0, "c"); // empty array, so return -1
+
+positionOfMax(a, -5); // n is negative, so it should return -1
+positionOfMax(a, 2); // check if it works and returns 1
+positionOfMax(b, 4); // there is two "c" strings (both max values of the array), but it should return the position of the first one (2)
+positionOfMax(b, 0); // n is zero, so it should return -1
+positionOfMax(c, 0); // empty array, so return -1
+
+rotateLeft(a, -5, 1); // n is negative, so it should reutrn -1
+rotateLeft(a, 3, 4); // pos is not within the first n elements, so it should return -1
+rotateLeft(a, 3, -1); // pos is negative, so it should return -1
+rotateLeft(b, 4, 1); // check if it works by making the array {"a", "c", "c", "b"} and returning 1
+rotateLeft(b, 3, 1); // check if it works by making the array ("a", "c", "b", "c") and returning 1
+rotateLeft(b, 0, 0); // n and pos are both zero, so it should return -1
+rotateLeft(c, 0, 0); // empty array, return -1
+
+countRuns(a, -1); // n is negative, so it should return -1
+countRuns(a, 3); // check if it works with single-element runs and returns 3
+countRuns(b, 4); // check if it works with multiple-element runs and returns 3
+countRuns(b, 0); // n is zero, so it should return 0
+countRuns(c, 0); // empty array, return 0
+
+flip(a, -7); // n is negative, so it should return -1
+flip(a, 0); // n is zero, so it should leave a unchanged and return 0
+flip(a, 2); // should only flip the first 2 elements and return 2, a should be {"b", "a", "c"}
+flip(b, 4); // should flip all elements and return 4, b should be {"c", "c", "b", "a"}
+flip(c, 0); // empty array, return 0
+
+differ(a, 0, b, 3); // return 0
+differ(a, -1, b, 0); // n1 is negative, return -1
+differ(a, 0, b, -1); // n2 is negative, return -1
+differ(a, 3, b, 4); // all elements are the same, return 3
+differ(a, 3, d, 5); // first element is different, return 0
+
+subsequence(a, 3, c, 0); // n2 is zero, return 0
+subsequence(a, -1, c, 0); // n1 is negative, return -1
+subsequence(a, 0, c, -1); // n2 is negative, return -1
+subsequence(a, 3, e, 2); // check if it works and returns 0
+
+lookupAny(a, -1, b, 2); // n1 is negative, return -1
+lookupAny(a, 0, b, -1); // n2 is negative, return -1
+lookupAny(a, 2, f, 1); // see if it only checks the first n1 elements in a, should return -1
+lookupAny(a, 3, f, 1); // make sure it works, should return 2
+lookupAny(b, 4, f, 1); // make sure it returns the first position, should return 2
+
+separate(a, -1, "d"); // n is negative, return -1
+separate(a, 3, "d"); // should keep a as it is as "d" is bigger than all elements, return 3
+separate(d, 5, "b"); // make sure function works, should return 1 and make d into {"a", "b", "c", "d", "d"}

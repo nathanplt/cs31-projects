@@ -1,0 +1,182 @@
+1) Question 1
+
+a) *ptr + 1 cannot be assigned to a value -- it's essentially saying 6 = 20, which is not allowed. The iteration must go from
+the first element to the last, which the original program does not do.
+
+int main()
+{
+    int arr[3] = { 5, 10, 15 };
+    int* ptr = arr;
+
+    *ptr = 30;          // set arr[0] to 30
+    *(ptr + 1) = 20;      // set arr[1] to 20
+    ptr += 2;
+    ptr[0] = 10;        // set arr[2] to 10
+
+    while (ptr != arr + 5)
+    {
+        cout << *(ptr - 2) << endl; // print values
+        ptr++;
+    }
+}
+
+b) The pointer needs to be passed in by reference, not by value. As of now, the function is creating a copy of the pointer's value,
+and making changes to that, rather than making changes ot the original pointer created in the main function. Thus, the pointer in
+the main function is left unchanged. To fix that, we can pass a reference to the pointer as a parameter, rather than the pointer
+itself.
+
+void findMax(int arr[], int n, int** pToMax)
+{
+    if (n <= 0)
+        return;      // no items, no maximum!
+
+    pToMax = arr;
+
+    for (int i = 1; i < n; i++)
+    {
+        if (arr[i] > *pToMax)
+                pToMax = arr + i;
+    }
+}
+
+c) As of now, ptr is left uninitialized before it is passed into the ncubed function. This leads to undefined behavior as ptr points
+to an arbitrary memory location, so attempting to dereference and assign a value to *ncubed is undefined behavior. To fix it, we can
+just intiailize ptr to some variable or dynamic memory location, as long as we allocate memory to it before calling the function.
+
+int main()
+{
+    int result;
+    int* ptr = &result;
+    computeCube(5, ptr);
+    cout << "Five cubed is " << *ptr << endl;
+}
+
+d) All comparisons are currently only comparing the memory address rather than the value the pointers are pointing to. For example,
+the comparison str1 != str2 just compares the memory address of both strings rather than comparing the current character value. To fix
+this, we can change all instances of str1/str2 with *str1/*str2 to reference the value instead of the memory location.
+
+bool strequal(const char str1[], const char str2[])
+{
+    while (*str1 != 0  &&  *str2 != 0)  // zero bytes at ends
+    {
+        if (*str1 != *str2)  // compare corresponding characters
+            return false;
+        str1++;            // advance to the next character
+        str2++;
+    }
+    return *str1 == *str2;   // both ended at same time?
+}
+
+e) The program is incorrect becuase it returns a pointer to an array that is local to a function (anArray), whose memory address
+gets deleted. In other words, the program attempts to use a memory reference of something that is deleted after the function ends.
+
+
+2) Question 2
+
+a) double* cat;
+b) double mouse[5];
+c) cat = mouse + 4;
+d) *cat = 25;
+e) *(mouse + 3) = 42;
+f) cat -= 3;
+g) *(cat + 1) = 17;
+h) cat[0] = 54;
+i) bool d = cat == mouse;
+j) bool b = *cat == *(cat + 1);
+
+
+3) Question 3
+
+a)
+double mean(const double* scores, int numScores)
+{
+    const double* ptr = scores;
+    int i = 0;
+    double tot = 0;
+    while (ptr + i != scores + numScores)
+    {
+        tot += *(ptr + i);
+        i++;
+    }
+    return tot/numScores;
+}
+
+b)
+const char* findTheChar(const char* str, char chr)
+{
+    for (int k = 0; *(str + k) != 0; k++)
+        if (*(str + k) == chr)
+            return str + k;
+
+    return nullptr;
+}
+
+c)
+const char* findTheChar(const char* str, char chr)
+{
+    while (*str != 0) {
+        if (*str == chr) {
+            return str;
+        }
+        str++;
+    }
+    return nullptr;
+}
+
+
+4) Question 4
+
+First, array is declared as an int array with 6 numbers. ptr is initialized to the value of maxwell(array, &array[2]). &array[2]
+is the memory location of the array's 3rd element while array is the memory location of its first element. Within maxwell, the value
+of these two are compared. The first element is 5 whereas the third element is 2, so maxwell returns the memory location of the
+first element (5 > 3). So, ptr is initialized to the first element of array.
+
+Then, *ptr = -1 sets the first element of array to -1. So now, array consists of { -1, 3, 4, 17, 22, 19 }. Next, ptr += 2 changes
+it to the memory location of array's third element. Since ptr[0] refers to the third element of array, ptr[1] now refers to the fourth
+element of array, so ptr[1] = 9 changes the fourth element to 9. Finally, array + 1 refers to the second element of array (as array itself
+refers to the first element), so *(array + 1) changes the value of the second element to 79. Now, as a recap, array consists
+of { -1, 79, 4, 9, 22, 19 } and ptr points to the memory location of array's third element.
+
+cout << &array[5] - ptr << endl will print 3 because &array[5] is the memory location of the sixth element and ptr is the memory
+location of the third element, 6 - 3 = 3.
+
+When swap1(&array[0], &arra[1]) is called, nothing changes because it takes in memory locations as parameters, and attempts to change those
+memory locations. However, this does not work as the memory locations it changes are copies made by the function rather than the
+original variables (as the parameters are not memory references).
+
+On the other hand, swap2 takes in memory locations as parameters, and changes the values at those memory locations, which works. So,
+when swap2(array, &array[2]) is called (where array points to the first element of array and &array[2] points to the third element), the
+first and third element in array are indeed swapped, leaving array as { 4, 79, -1, 9, 22, 19 }.
+
+So, finally, when the entire array is printed using a for loop, this is printed:
+4
+79
+-1
+9
+22
+19
+[empty line]
+
+This means the total output is:
+3
+4
+79
+-1
+9
+22
+19
+[empty line]
+
+
+5)
+void removeS(char* str) {
+    char* curr = str;
+    while (*curr != 0) {
+        if (*curr != 's' && *curr != 'S') {
+            *str = *curr;
+            str++;
+        }
+        curr++;
+    }
+    *str = 0;
+}

@@ -1,0 +1,87 @@
+a) The most significant obstacle was a misunderstanding of the instructions for the function computeVotes. At first, I understood the purpose of the function to be adding the number of votes in the poll data string to the current votes variable. However, this was logically incorrect and the correct purpose was not to add the votes, but to set the current votes variable to the number of votes in the poll data string. Although this was a nuanced difference, it most likely saved me from a lot of wrong test cases. Another issue was dealing with how to account for the fact that both state codes and party codes were case-insensitive. I eventually figured out that the built-in toupper() function was the best way to go and helped streamline the code for the issue.
+
+
+b) To write the functions computeVotes and hasRightSyntax, I used two helper functions. The first helper function was the provided function isValidState which checks if the given string is a valid upper-case state code. The second helper function, called string_to_int, was used to convert a string number into an int. For example, if given the string "987", string_to_int would return 987 as an int. The pseudocode for such is as follows:
+
+int string_to_int(string s):
+    initialize x to 0
+    for each character in s (from left to right):
+        multiply x by 10 to shift for the next digit
+        add the integer value of the current character to x
+    return x
+    
+Both computeVotes and hasRightSyntax were written with similar logic: iterate through the poll data string and parse each state prediction one at a time. For hasRightSyntax, while doing this, it checks if each state prediction is valid; if it isn't it returns false, and if it makes it through the whole poll data string, that means all the state predictions are valid and it returns true. The pseudo code for hasRightSyntax is as follows:
+
+
+bool hasRightSyntax(string poll_data):
+    while the end of poll_data has not been reached:
+        if current party code is not a letter:
+            return false
+        
+        find the vote count of the state prediction as a string
+        if the vote count string is empty:
+            return false
+        
+        convert the vote count string to an int using string_to_int
+        if the vote count is not between 0 and 99 inclusive
+            return false
+            
+        if there is not enough characters in the poll_data string for a state code:
+            return false
+        
+        if the state code, converted to upper-case letters, is not a valid state code according to isValidState:
+            return false
+        move onto the next state prediction
+        
+    return true (because the poll data string is made up of only valid state predictions)
+    
+For computeVotes, it first use hasRightSyntax to check if the poll data is valid. If it's not, it returns 1. Then it checks if the provided party code is a letter. If it's not, it returns 3. Then, it parses each state code one a time to find the number of votes for the specific party from all state predictions in the poll data. If it finds that any state prediction has 0 votes, it returns 2. Finally, it returns 0 and sets the vote count to the number of votes for the party in the poll data. The psuedo code is as follows:
+
+int computeVotes(string poll_data, char party, int& vote_count):
+    if poll_data does not have right syntax according to hasRightSyntax:
+        return 1
+    
+    if party is not a letter according to isalpha:
+        return 3
+        
+    initialize an int variable poll_votes to zero
+    while the end of poll data has not been reached:
+        store the current party code as a char variable
+    
+        find the vote count of the current state prediction as a string
+        convert the vote count string to an int using string_to_int
+        if the state's vote count is zero:
+            return 2
+            
+        if the current party code matches the target party code (the parameter) when both converted to upper-case:
+            add the state's vote count to poll_votes
+            
+        move onto the next state prediction
+    
+    set vote_count to poll_votes
+    return 0
+    
+    
+c) All test cases are assuming the int variable v was declared and initialized to -5000 before calling the test.
+
+computeVotes("$5CA", 'd', v) -> check if it returns 1 and v is unchanged because the party code is not a letter
+computeVotes("d100CA", 'd', v) -> check if it returns 1 because the number of votes is not between 0 and 99 inclusive
+computeVotes("d5cf", 'd', v) -> check if it returns 1 because the state doesn't exist
+computeVotes("d99caR5c", 'd', v) -> check if it returns 1 because the poll data is incomplete (unfinished state)
+computeVotes("d99ca5nj", 'd', v) -> check if it returns 1 because the poll data is incomplete (no party code)
+computeVotes("d99caRnj", 'd', v) -> check if it returns 1 because the poll data is incomplete (no vote count)
+computeVotes("d9cOR5cA", 'd', v) -> check if it returns 0 to make sure state code is case insensitive
+computeVotes("d90caD5nY", 'd', v) -> check if it returns 0 and v is set to 95 to make sure party is case insensitive
+computeVotes("d90caD5nY", '@', v) -> check if it returns 3 because @ is not a letter and thus, not a valid party code
+computeVotes("", '@', v) -> check if it returns 3 because "" is valid poll data, but @ is not a valid party code
+computeVotes("d90CaR0nYd5RI", 'd', v) -> check if it returns 2 and v is unchanged because one of the state's has zero vote count
+computeVotes("d9CaR2nYD9RI", 'd', v) -> check if it returns 0 and v is 18 to handle case insensitivty for both party code and state
+computeVotes("d9CaR2nYD9RI", 'r' v) -> check if it returns 0 and v is 2 to see if it can handle party codes other than 'd'
+computeVotes("d9CaR2nYD9RI", 'D' v) -> check if it returns 0 and v is 18 to see if it can handle upper-case party codes
+computeVotes("d-2CaR2nYD9RI", 'D' v) -> check if it returns 1 because a vote count is negative
+computeVotes("d2CaR2nYD9dc", 'D' v) -> check if it returns 0 and v is set to 11 to see if DC can actually vote
+computeVotes("d2Ca@2nYD9dc", 'D' v) -> check if it returns 1 because one of the party codes is invalid (@)
+computeVotes("d2OCaR2nYD9dc", 'D' v) -> check if it returns 1 because one of the vote counts is invalid (there's a letter O instead of a zero)
+computeVotes("d20C;aR2nYD9dc", 'D' v) -> check if it returns 1 because there's a random semicolon
+
+
