@@ -1,4 +1,4 @@
-# UCLA CS 31 – Fall 2024 Projects
+# UCLA CS 31 – C++ & OOP
 
 This repository contains my solutions to the programming assignments for **CS 31: Introduction to Computer Science I** at UCLA, completed during Fall 2024. The course covers fundamental C++ programming concepts, software engineering practices, and algorithmic thinking.
 
